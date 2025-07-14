@@ -5,17 +5,16 @@ from ta.momentum import RSIIndicator
 import datetime
 
 st.set_page_config(page_title="Panel RSI", layout="wide")
-
 st.title("📊 Panel RSI - Actualizado en Vivo")
 
 # Lista de acciones
 tickers = [
-    "NVDA","ASML","TXN","JPM","CRM","MMM","AAPL","TMUS","INTU","WMT",
-    "AXP","TRV","MSFT","CSCO","VZ","V","DIS","ABBV","AMZN","ISRG",
-    "BKNG","JNJ","GS","MS","GOOGL","AZN","AMAT","HD","MCD","PFE",
-    "META","LIN","AMGN","PG","MRK","PM","TSLA","PEP","HON","UNH",
-    "CAT","CL","AVGO","AMD","PDD","KO","BA","CB","NFLX","QCOM",
-    "CMCSA","IBM","NKE","COP","COST","ADBE","MU","CVX","SHW","LMT"
+    "NVDA", "ASML", "TXN", "JPM", "CRM", "MMM", "AAPL", "TMUS", "INTU", "WMT",
+    "AXP", "TRV", "MSFT", "CSCO", "VZ", "V", "DIS", "ABBV", "AMZN", "ISRG",
+    "BKNG", "JNJ", "GS", "MS", "GOOGL", "AZN", "AMAT", "HD", "MCD", "PFE",
+    "META", "LIN", "AMGN", "PG", "MRK", "PM", "TSLA", "PEP", "HON", "UNH",
+    "CAT", "CL", "AVGO", "AMD", "PDD", "KO", "BA", "CB", "NFLX", "QCOM",
+    "CMCSA", "IBM", "NKE", "COP", "COST", "ADBE", "MU", "CVX", "SHW", "LMT"
 ]
 
 # Fecha de análisis
@@ -31,16 +30,16 @@ with st.spinner("Cargando datos y calculando RSI..."):
             if df.empty or len(df) < 15:
                 continue
 
-           close = df["Close"]
-if isinstance(close, pd.DataFrame):
-    close = close.squeeze()
+            close = df["Close"]
+            if isinstance(close, pd.DataFrame):
+                close = close.squeeze()
+            if isinstance(close, pd.DataFrame):
+                close = close.iloc[:, 0]
 
-if isinstance(close, pd.DataFrame):
-    close = close.iloc[:, 0]
-rsi = RSIIndicator(close=close, window=14).rsi()
-
+            rsi = RSIIndicator(close=close, window=14).rsi()
             ultimo_rsi = round(rsi.iloc[-1], 2)
             rsi_data.append({"Ticker": ticker, "RSI": ultimo_rsi})
+
         except Exception as e:
             st.warning(f"No se pudo procesar {ticker}: {e}")
 
