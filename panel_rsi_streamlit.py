@@ -31,7 +31,11 @@ with st.spinner("Cargando datos y calculando RSI..."):
             if df.empty or len(df) < 15:
                 continue
 
-            rsi = RSIIndicator(close=df["Close"], window=14).rsi()
+            close = df["Close"]
+if isinstance(close, pd.DataFrame):
+    close = close.iloc[:, 0]
+rsi = RSIIndicator(close=close, window=14).rsi()
+
             ultimo_rsi = round(rsi.iloc[-1], 2)
             rsi_data.append({"Ticker": ticker, "RSI": ultimo_rsi})
         except Exception as e:
